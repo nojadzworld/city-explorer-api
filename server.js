@@ -5,7 +5,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-let data = require('.data/weather.json');
+let data = require('./data/weather.json');
 // *** ONCE WE BRING IN EXPRESS WE CALL IT TO CREATE THE SERVER
 const app = express();
 
