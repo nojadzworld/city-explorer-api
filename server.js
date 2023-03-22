@@ -5,7 +5,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-let data = require('./data/weather.json');
+let weather = require('./data/weather.json');
 // *** ONCE WE BRING IN EXPRESS WE CALL IT TO CREATE THE SERVER
 const app = express();
 
@@ -37,32 +37,42 @@ app.get('/hello', (request, response) => {
 app.get('/weather', (request, response, next) => {
   console.log('this is the request', request);
   try {
-    // let lat = request.query.lat;
-    // let lon = request.query.lon;
-    let searchQuery = request.query.city_name;
-    console.log('this is the search query', searchQuery);
-    let cityData = data.find(e => e.city_name === searchQuery);
+    //  /weather?lat=Value&lon=Value&SearchQuery=Value
+    let lat = request.query.lat;
+    let lon = request.query.lon;
+    let citytName = request.query.searchQuery;
 
+    let city = weather.find(city => city.city_name.toLowerCase() === citytName.toLowerCase());
+    let weatherToSend = city.data.map(day => new Forecast(day));
+    console.log(request.query);
+    response.status(200).send(weatherToSend);
 
-
-    let returnData = cityData.data.map(eachDay => {
-      return new Forecast(eachDay);
-
-    });
-
-    response.status(200).send(returnData);
   } catch (error) {
     next(error);
   }
-});
 
+
+
+  //   let searchQuery = request.query.city_name;
+  //   console.log('this is the search query', searchQuery);
+  //   let cityData = data.find(e => e.city_name === searchQuery);
+  //   let returnData = cityData.data.map(eachDay => {
+  //     return new Forecast(eachDay);
+  //   });
+
+  //   response.status(200).send(returnData);
+  // } catch (error) {
+  //   next(error);
+  // }
+  // });
+});
 // Class to groom bulk data
 
 class Forecast {
-  constructor(weatherObj) {
-    console.log(weatherObj);
-    this.date = weatherObj.valid_date;
-    this.description = weatherObj.weather.description;
+  constructor(dayObj) {
+    console.log(dayObj);
+    this.date = dayObj.valid_date;
+    this.description = dayObj.weather.description;
   }
 }
 
