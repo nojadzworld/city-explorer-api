@@ -51,7 +51,7 @@ let getWeather = async (request, response, next) => {
     // console.log(url);
     let weather = await axios.get(url);
     // let parsedweather = new Forecast(weather.data)
-    console.log('----->', weather.data.data, '<-----');
+    // console.log('----->', weather.data.data, '<-----');
 
    let parsedweather = weather.data.data.map(dayObj => {
 
